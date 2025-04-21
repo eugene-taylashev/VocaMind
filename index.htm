@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/x-icon" href="/images/adium.ico">
+  <title>VocaMind: Member Call Analysis</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-color: #f4f4f4;
+    }
+
+    header {
+      background-color: #28b67a;
+      color: white;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header img {
+      height: 40px;
+      display: flex;
+      align-items: right;}
+
+    nav {
+      background-color: #1e9e68;
+      display: flex;
+      gap: 20px;
+      padding: 10px 20px;
+    }
+
+    nav button {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    nav button:hover {
+      text-decoration: underline;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: auto auto;
+      padding: 10px;
+    }
+
+/*    .container > div {
+      border: 1px solid black;
+   }*/
+
+    div.main_tab {
+      display: none
+    }
+
+    #responseArea {
+      padding: 20px;
+      background-color: white;
+      margin: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      min-height: 300px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 10px;
+      background-color: #28b67a;
+      color: white;
+    }
+
+    footer a {
+      color: white;
+      margin: 0 10px;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    .subtitle { 
+        font-family: verdana,arial,serif; 
+        font-size: 12pt; 
+        font-weight: bold;
+        margin-top: 0.8em; 
+    }
+
+    .caption {    
+        FONT-FAMILY: Arial, Helvetica, sans-serif; 
+        FONT-SIZE: 10pt;
+        font-style: italic;
+    }
+
+    .text {
+        FONT-FAMILY: Arial, Helvetica, sans-serif; 
+        FONT-SIZE: 10pt;
+    }
+
+    .comment {
+        FONT-FAMILY: Arial, Helvetica, sans-serif; 
+        FONT-SIZE: 8pt;
+    }
+
+    .subcomment {
+        FONT-FAMILY: Arial, Helvetica, sans-serif; 
+        FONT-SIZE: 6pt;
+    }
+
+    .button {
+        FONT-FAMILY: Arial, Helvetica, sans-serif; 
+        FONT-SIZE: 10pt;
+        cursor: pointer;
+        text-decoration:underline; 
+    }   	  
+
+    .debug_ok {    
+        FONT-FAMILY: Arial, Helvetica, sans-serif; 
+        FONT-SIZE: 10pt;
+        COLOR: rgb(1,173,1);
+    }
+
+    .debug_err {    
+        FONT-FAMILY: Arial, Helvetica, sans-serif; 
+        FONT-SIZE: 10pt;
+        COLOR: rgb(255,0,0);
+    }
+  </style>
+</head>
+<body onload="init();">
+  <header>
+    <div>
+      <h2>VocaMind: Member Call Analysis</h2>
+    </div>
+    <img src="images/Logo.png" alt="Organization Logo"/>
+  </header>
+
+  <nav>
+    <button onclick="VMind.out_tab('tab_list')">Manage Calls</button>
+    <button onclick="VMind.out_tab('tab_upload')">Upload Call</button>
+    <button onclick="VMind.out_tab('tab_chat')">Chat with AI</button>
+    <button onclick="VMind.out_tab('tab_logs')">Activity Logs</button>
+    <button onclick="VMind.out_tab('tab_config')">Settings</button>
+  </nav>
+
+  <div id="responseArea">
+
+    <div class="main_tab" id="tab_list">
+      <h2>Manage Customer Calls</h2>
+      <input type="date" />
+      <input type="text" placeholder="Search by agent or keyword..." />
+      <button>Search</button>
+      <ul><li>Example Call Record - 01/01/2025</li></ul>
+    </div>
+
+    <div class="main_tab" id="tab_upload">
+      <h2>Upload Call Audio</h2>
+
+      <div class="container">
+
+        <div>
+          <input id="input_upload_file" name="upload_file"  type="file" accept="audio/*" />
+          <br><br>
+          <button onclick="VMind.prep_upload_file();">Upload</button>
+        </div>
+
+        <div><span class="subtitle">Server response:</span>
+          <span style="margin-left:100px">Level of details: </span>
+          <select onchange="VMind.LogLevel=this.value;" >
+            <option id="log_level_0" value="0">None</option>
+            <option id="log_level_1" value="1">Few</option>
+            <option id="log_level_2" value="2">Some</option>
+            <option id="log_level_3" value="3">All</option>
+          </select>
+          <div><textarea id="upload_log" readonly rows="12" style="width:900px"></textarea></div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="main_tab" id="tab_chat">
+      <h2>Chat with VocaMind</h2>
+    </div>
+
+    <div class="main_tab" id="tab_logs">
+      <h2>Activity Logs</h2>
+      <ul><li>2025-04-18: Call uploaded by Agent X</li></ul>
+    </div>
+
+    <div class="main_tab" id="tab_config">
+      <h2>Application Settings</h2>
+      <label>
+        Theme:
+        <select>
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+        </select>
+      </label>
+    </div>
+  </div>
+
+  <footer>
+    <p>
+      <a href="#">Help</a> |
+      <a href="#">Privacy Policy</a> |
+      <a href="#">Terms of Use</a>
+    </p>
+  </footer>
+  <script src="images/vocamind.js"></script>
+</body>
+</html>
