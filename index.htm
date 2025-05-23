@@ -131,6 +131,171 @@
         FONT-SIZE: 10pt;
         COLOR: rgb(255,0,0);
     }
+
+    div.bot_response {
+      background-color: #e0f7fa;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      overflow-y: auto;
+      max-height: 200px;
+    }
+
+    div.bot_message {
+      background-color: #ffffff;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 5px;
+      max-width: 80%;
+    }
+
+    div.user_message {
+      background-color: #d1c4e9;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 5px;
+      max-width: 80%;
+      align-self: flex-end;
+    }
+
+		.chart_bar { 
+			color: white; 
+			padding: 1%; 
+			text-align: right; 
+			font-size: 20px; 
+			border-radius: 15px; 
+      display: inline-block;
+		} 
+
+		.bar_legend { 
+			text-align: left; 
+			font-size: 20px; 
+      display: inline-block;
+      width:150px;
+		} 
+
+    .csat-bar-1 { background-color: #e74c3c; }  /* Very Dissatisfied */
+    .csat-bar-2 { background-color: #f39c12; }  /* Dissatisfied */
+    .csat-bar-3 { background-color: #f1c40f; }  /* Neutral */
+    .csat-bar-4 { background-color: #2ecc71; }  /* Satisfied */
+    .csat-bar-5 { background-color: #28b67a; }  /* Very Satisfied */
+
+    .piechart {
+      width: 200px;
+      height: 200px;
+      font-size: 40px;
+      color: green;
+      text-align: center;
+      vertical-align: middle;
+      line-height: 200px;
+      border-radius: 50%;
+      background: conic-gradient(
+                    #f1c40f 0 10%,
+                    #2ecc71 0 90%
+                );
+            }
+    .piechart_legend{
+			text-align: left; 
+			font-size: 20px; 
+      display: inline-block;
+    }
+
+    /* The Modal (background) */
+    .modal {
+      display: none; /* Hidden by default */
+      position: fixed; /* Stay in place */
+      vertical-align: text-top;
+      z-index: 1; /* Sit on top */
+      padding-top: 100px; /* Location of the box */
+      left: 0;
+      top: 0;
+      width: 100%; /* Full width */
+      height: 100%; /* Full height */
+      overflow: auto; /* Enable scroll if needed */
+      background-color: rgb(0,0,0); /* Fallback color */
+      background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+
+    /* Modal Content/Box */
+    .modal-content {
+      position: relative;
+      background-color: #fefefe;
+      margin: auto; /* 15% from the top and centered or margin: auto;*/
+      padding: 0;
+      border: 1px solid #888;
+      width: 90%; /* Could be more or less, depending on screen size */
+      height: 80%;
+      vertical-align: text-top;
+      box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+      -webkit-animation-name: animatetop;
+      -webkit-animation-duration: 0.4s;
+      animation-name: animatetop;
+      animation-duration: 0.4s
+    }
+
+    /* Add Animation */
+    @-webkit-keyframes animatetop {
+      from {top:-300px; opacity:0} 
+      to {top:0; opacity:1}
+    }
+
+    @keyframes animatetop {
+      from {top:-300px; opacity:0}
+      to {top:0; opacity:1}
+    }
+
+    /* The Close Button */
+    .modal-close {
+      color: black;
+      float: right;
+      vertical-align: top; 
+      font-size: 28px;
+      font-weight: bold;
+      margin-right: 5px;
+    }
+
+    .modal-close:hover,
+    .modal-close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .modal-header {
+      padding: 2px 16px;
+      background-color: #e6e6e6;
+      color: black;
+      font-weight: bold;
+      font-family: Roboto, arial, sans-serif; 
+      font-size: 20px; 
+      margin-bottom: 5px;
+    }
+
+    .modal-body {padding: 2px 16px;}
+    .loader {
+    border: 16px solid #f3f3f3; /* Light grey */
+    border-top: 16px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+}
+
+.loader_small {
+    border: 6px solid #f3f3f3; /* Light grey */
+    border-top: 6px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+
   </style>
 </head>
 <body onload="init();">
@@ -141,26 +306,140 @@
     <img src="images/Logo.png" alt="Organization Logo"/>
   </header>
 
+  <!-- The Modal -->
+  <div id="ModalMain" class="modal">
+      <div id="ModalBox" class="modal-content" >
+        <span class="modal-close" onclick="VMind.hideModal();" >&times;</span>
+        <div id="ModalHeader" class="modal-header">
+          <div>Modal Header</div>
+        </div>
+        <div id="ModalBody" class="modal-body">
+          Some text in the Modal..
+        </div>
+      </div>
+  </div>
+  <!-- End of Modal -->
+
+  <!-- Start Main Navigation -->
   <nav>
+    <button onclick="VMind.out_tab('tab_dashboard')">Dashboard</button>
     <button onclick="VMind.out_tab('tab_list')">Manage Calls</button>
     <button onclick="VMind.out_tab('tab_upload')">Upload Call</button>
     <button onclick="VMind.out_tab('tab_chat')">Chat with AI</button>
     <button onclick="VMind.out_tab('tab_logs')">Activity Logs</button>
-    <button onclick="VMind.out_tab('tab_config')">Settings</button>
+    <!--button onclick="VMind.out_tab('tab_config')">Settings</button-->
   </nav>
 
   <div id="responseArea">
 
     <div class="main_tab" id="tab_list">
-      <h2>Manage Customer Calls</h2>
-      <input type="date" />
+      <div class="subtitle">Manage Customer Calls</div>
+      <!--input type="date" />
       <input type="text" placeholder="Search by agent or keyword..." />
-      <button>Search</button>
-      <ul><li>Example Call Record - 01/01/2025</li></ul>
+      <button>Search</button-->
+      <table border="1" style="width:100%; margin-top: 10px; border-collapse: collapse;">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Call ID</th>
+            <th>Agent</th>
+            <th>Duration</th>
+            <th>Transcript?</th>
+            <th>Analysis?</th>
+            <th>Sentiment</th>
+            <th>CSAT</th>
+            <th>FCR</th>
+            <th>Abuse?</th>
+          </tr>
+        </thead>
+        <tbody id="call_list">
+          <!-- Call records will be populated here -->
+        </tbody>
+      </table>
     </div>
 
+    <div class="main_tab" id="tab_dashboard">
+      <h2>Dashboard</h2>
+      <table width="100%">
+        <tr>
+          <td><h3>Customer Satisfaction Score (CSAT)</h3></td>
+          <td><h3>First call resolution (FCR)</h3></td>
+        </tr>
+        <tr>
+          <td>
+            <div id="bar_width_total" style="width:100%">
+              <span class="bar_legend">Very satisfied</span>
+              <div id="csat_stat_5" class="chart_bar csat-bar-5">0</div>
+            </div>
+            <div style="width:100%">
+              <span class="bar_legend">Satisfied</span>
+              <div id="csat_stat_4" class="chart_bar csat-bar-4">0</div>
+            </div>
+            <div style="width:100%">
+              <span class="bar_legend">Neutral</span>
+              <div id="csat_stat_3" class="chart_bar csat-bar-3">0</div>
+            </div>
+            <div style="width:100%">
+              <span class="bar_legend">Dissatisfied</span>
+              <div id="csat_stat_2" class="chart_bar csat-bar-2">0</div>
+            </div>
+            <div style="width:100%">
+              <span class="bar_legend">Very dissatisfied</span>
+              <div id="csat_stat_1" class="chart_bar csat-bar-1">0</div>
+            </div>
+            <div class="comment">Total calls with CSAT: <span id="csat_total">0</span></div>
+          </td>
+          <td>
+            <div id="fcr_pie" class="piechart">10%</div>
+            <div class="comment">Total calls with FCR: <span id="fcr_total">0</span></div>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="main_tab" id="tab_call">
+      <div class="subtitle">Call Details</div>
+      <div>
+        <span class="caption">Call ID:</span> <span class="text" id="call_id"></span>
+        <label class="caption" style="margin-left:50px;" for="l_agents">Agent: </label>
+        <select name="l_agents" id="l_agents" ></select>
+        <span style="margin-left:50px" class="caption">Upload date:</span> 
+        <span class="text" id="created_at"></span>
+      </div>
+      <div><audio controls id="call_audio"></audio></div>
+      <div class="caption">Call Summary: 
+        <img style="cursor: pointer;" id="summ_arrow" src="images/arrow-right-3.ico" onclick="VMind.div_hide_show('call_summary','summ_arrow');">
+      </div>
+      <div class="text" id="call_summary" style="display: none; margin-left:20px;"></div>
+
+      <div id="call_details">
+        <span class="caption">Sentiment:</span> <span id="cust_sentiment" class="text"></span>
+        <span class="text" style="margin-right:30px; margin-left:30px;">|</span>
+        <span class="caption">CSAT:</span> <span id="cust_satis" class="text"></span>
+        <span class="caption" style="margin-left:10px">CSAT Notes</span>
+        <img style="cursor: pointer;" id="csat_arrow" src="images/arrow-right-3.ico" onclick="VMind.div_hide_show('csat_notes','csat_arrow');">
+        <span class="text" style="margin-right:30px; margin-left:30px;">|</span>
+        <span class="caption">FCR:</span> <span id="is_fcr" class="text"></span>
+        <span class="caption" style="margin-left:10px">FCR Notes</span>
+        <img style="cursor: pointer;" id="fcr_arrow" src="images/arrow-right-3.ico" onclick="VMind.div_hide_show('fcr_notes','fcr_arrow');">
+        <span class="text" style="margin-right:30px; margin-left:30px;">|</span>
+        <span class="caption">Signs of Abuse:</span> <span id="is_abuse" class="text"></span>
+        <span class="caption" style="margin-left:10px">Abuse Notes</span>
+        <img style="cursor: pointer;" id="abuse_arrow" src="images/arrow-right-3.ico" onclick="VMind.div_hide_show('abuse_notes','abuse_arrow');">
+      </div>
+      <div class="text" id="csat_notes" style="display: none; margin-left:20px;">None</div>
+      <div class="text" id="fcr_notes" style="display: none; margin-left:20px;">None</div>
+      <div class="text" id="abuse_notes" style="display: none; margin-left:20px;">None</div>
+
+      <div class="caption">Full transcript: 
+        <img style="cursor: pointer;" id="trans_arrow" src="images/arrow-right-3.ico" onclick="VMind.div_hide_show('call_transcript','trans_arrow');">
+      </div>
+      <div class="text" id="call_transcript" style="display: none; margin-left:20px;"></div>
+
+    </div>
+    
     <div class="main_tab" id="tab_upload">
-      <h2>Upload Call Audio</h2>
+      <div class="subtitle">Upload Call Audio</div>
 
       <div class="container">
 
@@ -185,16 +464,27 @@
     </div>
 
     <div class="main_tab" id="tab_chat">
-      <h2>Chat with VocaMind</h2>
+      <div class="subtitle">Chat with VocaMind</div>
+      <div class="bot_response" id="bot_response">
+        <div class="bot_message">Hello! How can I assist you today?</div>
+      </div>
+      <textarea id="user_input" rows="4" cols="90" placeholder="Type your message here..."></textarea>
+      <div>
+        <button onclick="VMind.ask_bot();">Send</button>
+
+        <label class="caption" style="margin-left: 20px;" for="llm_modes">Select a model:</label>
+        <select name="llm_modes" id="llm_modes">
+        </select>
+      </div>
     </div>
 
     <div class="main_tab" id="tab_logs">
-      <h2>Activity Logs</h2>
-      <ul><li>2025-04-18: Call uploaded by Agent X</li></ul>
+      <div class="subtitle">Activity Logs</div>
+      <div id="activity_log"></div>
     </div>
 
     <div class="main_tab" id="tab_config">
-      <h2>Application Settings</h2>
+      <div class="subtitle">Application Settings</div>
       <label>
         Theme:
         <select>
